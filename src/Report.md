@@ -54,7 +54,7 @@ The most "confused" classes seem to be, Forest and Open County, Which makes sens
 The Nearest Neighbor classifier provided a simple and effective baseline for evaluating the Bag-of-Words representation. While it did not model class boundaries explicitly, its performance reflected the quality of the visual vocabulary and the histogram representation. 
 The results obtained with this method will serve as a reference point for comparison with more advanced classifiers, such as the linear Support Vector Machine presented in the following section.
 
-# 4. Training a multiclass linear SVM
+## 4. Training a multiclass linear SVM
 Since standard SVMs are inherently binary classifiers, we will train a multiclass linear Support Vector Machine (SVM) classifier using the one-vs-rest strategy, with the goal of learning decision boundaries for each of the 15 scene categories. 
 
 Before training the SVM classifiers, the BoW histograms are normalized to ensure that all features are on a comparable scale. A ```StandardScaler``` is fitted on the training data and then applied to both the training and test histograms. This results in features with zero mean and unit variance, which helps the linear SVM treat all features equally during learning.
