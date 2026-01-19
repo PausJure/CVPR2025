@@ -78,13 +78,46 @@ Compared to the Nearest Neighbor approach, the linear SVM classifier provides a 
 
 
 ## 5. Evaluating the multiclass SVM
+The performance of the SVM is evaluated on the test set. Each test image is represented using a normalized Bag-of-Words histogram stored in ```X_test_scaled```. This guarantees consistency between training and test representations and prevents feature scaling discrepancies from affecting the performance of our classification.
+
+We then provide the histogram of each test image as an input to every binary SVM classifier. Each of these classifiers then computes a real-valued output via its decision function, corresponding to the signed distance between the test sample and the separating hyperplane. These scores quantify the confidence of each classifier with respect to its target class. 
+As a result, each test image is associated with a vector of 15 real-valued scores, one for each scene category.
+The predicted class is therefore the index of the classifier whose decision function yields the highest score. This procedure is repeated for all test images, resulting in a predicted label for each sample in the test set.
+
+```
+# Calculate Accuracy
+svm_acc = accuracy_score(y_test, y_pred_svm)
+print(f"Multiclass SVM Accuracy: {svm_acc*100:.2f}%")
+
+```
+
+The predicted class labels are compared with the ground truth (```y_test```), to compute the overall classification accuracy. This accuracy measures how often the classifier makes correct predictions across all classes and allows a direct comparison with the Nearest Neighbor baseline.
+In addition to accuracy, a confusion matrix is computed and visualized to analyze class-wise performance. This highlights common confusions between visually similar scene classes and provides insights into the strengths and weaknesses of the multiclass SVM classifier.
+
+As we can see form the results, the multiclass linear SVM demonstrates slightly improved performance compared to the Nearest Neighbor classifier. Pushing our acuracy to roughly 39%.
 
 
+## Optional tasks
+
+### 6. Training the SVM using a Gaussian kernel
+This section explores an optional extension of the project, in which a non-linear Support Vector Machine is trained using a generalized Gaussian kernel based on the χ² distance. 
+This is because this kernel is particularly well suited for histogram representations, such as our Bag-of-Words features, as it better captures differences of distribution between feature vectors.
+
+We start by computing our kernels using the ```chi2_kernel``` function provided by the sickit learn library. This function implements a generalised gaussian kernel based on the  χ² distance and where gamma is a scaling parameter.
+
+A multiclass SVM classifier is trained using the precomputed χ² kernel matrix. The standard SVC implementation is employed with the kernel='precomputed' option, allowing for direct use of the custom kernel we calculated. Note that a higher regularization parameter ```C``` is selected compared to the one used in the linear SVM, as we now have a non-linear kernel with more complex decision bounderies which often benefit from reduced regularization.
+
+The trained SVM is evaluated on the test set by predicting class labels using the χ² kernel computed between test and training histograms. The classification accuracy is computed once again by comparing the predicted labels with the ground truth annotations and we also construct a confusion matrix to analyze performance more closely. 
+
+As we can clearly see the performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 39%.
+
+### 7. Multiclass SVM using the Error Correcting Output Code (ECOC)
+This task was performed following the approach introduced by Dietterich and Bakiri (1994). Here each class is represented by a binary code (an array of 0 and 1). Ideally we want each class reppresented by a unique code. 
+The implementation was done using the sickit-learn libraries OutputCodeClassifier function which generates these unique codes randomly. 
+So instead of training one classifier per class (as in one-vs-rest), ECOC uses one binary classifier per bit of the unique code for each class (codebook). 
+Since we have more classifiers than in our previous approaches, some of them should theoretically correct the mistakes made by other classifiers. However in practice classifier mistakes are correlated and this does not happen. 
+This is exactly what we see in our results: the accuracy of this approach is roughly 32%.
 
 
-
-
-
-
-
+### 8. Soft assigment
 
