@@ -120,4 +120,12 @@ This is exactly what we see in our results: the accuracy of this approach is rou
 
 
 ### 8. Soft assigment
+In the standard BoW model used so far, each SIFT descriptor is assigned to a single visual word (cluster centroid) using hard assignment. However, this can lead to quantization errors, especially when descriptors are near cluster boundaries.
 
+Soft assignment addresses this issue by allowing each descriptor to contribute to multiple histogram bins, weighted according to its similarity to each visual word. This provides a smoother, more robust image representation. Soft assignment solves this issue by allowing each descriptor to contribute to multiple histogram bins with corresponding weights based on distance to each cluster center.
+
+This is exactly what was implemented in step 8. 1000 SIFT descriptors were randomly sampled from the training set. For each descriptor, the distance to all cluster centers was computed, and the minimum distance was recorded. The average of these minimum distances was then used as the value of σ, which controls the Gaussian soft assignment, assigning higher weights to clusters closer to each descriptor. ```weights = np.exp(- (distances ** 2) / (2 * sigma ** 2))```
+A function that computes the soft assigment histogram for a given image was built. For each image, SIFT descriptors are extracted, and for each descriptor, the distances to all cluster centers are calculated to determine the corresponding weights. The contributions of all descriptors are then summed to construct the histogram, which is then L1 normalized to ensure comparability across images.
+Both the train and test dataset were processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
+
+As stated earlier the linear multiclass SVM achieved an accuracy of 38%, whereas the current approach improved performance to 46%!
