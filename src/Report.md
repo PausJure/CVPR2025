@@ -129,3 +129,50 @@ A function that computes the soft assigment histogram for a given image was buil
 Both the train and test dataset were processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
 
 As stated earlier the linear multiclass SVM achieved an accuracy of 38%, whereas the current approach improved performance to 46%!
+
+### 9. Adding spatial information
+While Bag-of-Words (BoW) histograms capture the appearance of local features, they ignore spatial information, which can be important for distinguishing image categories.
+
+Spatial Pyramid Matching (SPM) [Lazebnik et al., 2006] addresses this by partitioning the image into grids at multiple levels and computing histograms for each region. When combined with soft assignment, this approach produces feature vectors that encode both:
+- Appearance information (via soft-assigned histograms)
+- Spatial layout information (via pyramidal subdivision)
+
+This was done by creating a function: ```def extract_spatial_pyramid_soft(img, sift_provider, kmeans_model, k, sigma)``` which extracts the SIFT descriptors and computes the soft-assigment weights and then defines two spatial pyramid levels:
+
+- Level 0: The entire image -> 1 histogram
+- Level 1: Split the image in a 2x2 grid --> 4 histograms
+
+To create the 4 histograms (one for each block of the 2x2 grid) the ```x``` and ```y``` coordinates of each keypoint were used, allowing to deterine which quadrand it belongs to. 
+So at the end we have a feature vector that is 5 times bigger after concatenation. Lastly L1 normalization was performed to ensure comparability between images. 
+
+The train and test images were then processed using this function in order to produce ```X_train_spm``` and ```X_test_spm```. Histograms are then sandardised using ```StandardScaler``` before training a Linear SVM. 
+
+This approach increaases accuracy to 47% from the initial 36% baseline. 
+Note that it is only roughly 1% more accurate than the soft assigment method. This may be due to small object sizes, variable spatial arrangements, or reduced descriptor density in subdivided quadrants. Nonetheless, the spatial pyramid representation maintains performance while encoding additional spatial structure. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
