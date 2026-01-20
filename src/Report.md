@@ -33,7 +33,7 @@ To make the representation invariant to the number of detected keypoints and com
 
 This procedure is then repeated for all images in the training set, producing a matrix of size ```N × k```, where N is the number of training images and k is the vocabulary size. Each row of this matrix represents the BoW histogram of one image and serves as input to the subsequent classification stages.
 
-![Image of a few L1 normalised histograms](/images/fewHistogramsL1norm.png)
+![Image of a few L1 normalised histograms](images/fewHistogramsL1norm.png)
 
 
 ## 3. Nearest Neighbour Classifier
@@ -54,7 +54,7 @@ As for the results, this classifier performs decently well with an accuracy of r
 
 In addition to accuracy, a confusion matrix is computed to provide a detailed analysis of performance. The confusion matrix reports, for each true category, the number of test images assigned to each predicted category. This allows easy identification of frequently confused classes, like visually similar indoor or outdoor environments. In this implementation, the confusion matrix is visualized using a heatmap representation, making inspection of the classifier’s strengths and weaknesses across the 15 categories easy to spot.
 
-![Image of NN confusion matrix](/images/NNconfMatrix.png)
+![Image of NN confusion matrix](images/NNconfMatrix.png)
 
 The most "confused" classes seem to be Forest and Open Country, which makes sense since some open country images often include forests.
 
@@ -109,7 +109,7 @@ print(f"Multiclass SVM Accuracy: {svm_acc*100:.2f}%")
 The predicted class labels are compared with the ground truth (```y_test```), to compute the overall classification accuracy. This accuracy measures how often the classifier makes correct predictions across all classes and allows a direct comparison with the Nearest Neighbour baseline.
 In addition to accuracy, a confusion matrix is computed and visualised to analyse class-wise performance. This highlights common confusions between visually similar scene classes and provides insights into the strengths and weaknesses of the multiclass SVM classifier.
 
-![Image of SVM confusion matrix](/images/SVMconfMatrix.png)
+![Image of SVM confusion matrix](images/SVMconfMatrix.png)
 
 As we can see form the results, the multiclass linear SVM demonstrates slightly improved performance compared to the Nearest Neighbor classifier. Pushing our acuracy to roughly 39%.
 
@@ -130,7 +130,7 @@ A multiclass SVM classifier is trained using the precomputed χ² kernel matrix.
 
 The trained SVM is evaluated on the test set by predicting class labels using the χ² kernel computed between test and training histograms. The classification accuracy is computed once again by comparing the predicted labels with the ground truth annotations and we also construct a confusion matrix to analyze performance more closely. 
 
-![Image of a non-linear SVM confusion matrix](/images/ChiSVMconfMatrix.png)
+![Image of a non-linear SVM confusion matrix](images/ChiSVMconfMatrix.png)
 
 The performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 39%.
 
