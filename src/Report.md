@@ -15,6 +15,12 @@ To complete this task it was required to sample a certain number of sift descrip
 
 Since we are dealing with very different scenes in the dataset a MAX_PER_IMAGE limit on sift descriptors was used to try and avoid overrepresentation since some images might contain a very large number of descriptors like an image of a forest which might yield thousands of SIFT descriptors, while a simple image of a clear sky or a plain wall might only yield a few dozen.
 
+<p align="center">
+  <img src="images/SIFTkeypoints1.png" width="30%" />
+  <img src="images/SIFTkeypoints2.png" width="30%" />
+  <img src="images/SIFTkeypoints3.png" width="30%" />
+</p>
+
 Collecting all descriptors for each image would let more "complex" images dominate the pool and bias KMeans toward their features. Limiting descriptors per image ensures each image contributes more equally, producing a more balanced and robust visual vocabulary.
 
 Proceeding with the task, k-means clustering was implemented, leaving the number of clusters as a user definable value to be able to experiment and fine-tune the pipeline. Note that the n_init parameter in the KMeans function is set to 10, essentially running the algorithm 10 times with different initialisations and then choosing the best solution.
