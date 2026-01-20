@@ -65,8 +65,9 @@ In addition to accuracy, a confusion matrix is computed to provide a detailed an
 
 ![Image of NN confusion matrix](images/NNconfMatrix.png)
 
-The most frequently confused classes are Forest and Open Country, as well as Open Country and Mountains. This is expected, since images labeled as Open Country in the dataset often contain visual elements of forests or mountainous terrain. As a result, these overlapping features naturally confuse the relatively simple classification model.
+The most frequently confused classes are Forest and Open Country, as well as Open Country and Mountains. This is expected, since images labeled as Open Country in the dataset often contain visual elements of forests or mountainous terrain. As a result, these overlapping features naturally confuse the relatively simple classification model. 
 
+Examples of images from Forest, Mountains and OpenCountry classes respectively:
 <p align="center">
   <img src="images/Mountains.jpg" width="33%" />
   <img src="images/Forest.jpg" width="33%" />
