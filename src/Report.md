@@ -25,7 +25,7 @@ Collecting all descriptors for each image would let more "complex" images domina
 
 Proceeding with the task, k-means clustering was implemented, leaving the number of clusters as a user definable value to be able to experiment and fine-tune the pipeline. Note that the n_init parameter in the KMeans function is set to 10, essentially running the algorithm 10 times with different initialisations and then choosing the best solution.
 
-<img src="images/K-means_convergence.gif" width="50%">
+<img src="images/K-means_convergence.gif" width="20%">
 
 
 
