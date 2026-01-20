@@ -171,7 +171,7 @@ This is exactly what was implemented in step 8. 1000 SIFT descriptors were rando
 weights = np.exp(- (distances ** 2) / (2  sigma * 2))
 ```
 A function that computes the soft assignment histogram for a given image was then built. For each image, SIFT descriptors are extracted, and for each descriptor, the distances to all cluster centers are calculated to determine the corresponding weights. The contributions of all descriptors are then summed to construct the histogram, which is then L1 normalised to ensure comparability across images.
-Both the train and test datasets were processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
+Both the train and test datasets were re-processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
 
 As stated earlier the linear multiclass SVM achieved an accuracy of 38%, whereas the current approach improved performance to 46%!
 
@@ -185,14 +185,17 @@ Spatial Pyramid Matching (SPM) [Lazebnik et al., 2006] addresses this by partiti
 - Appearance information (via soft ssigned histograms)
 - Spatial layout information (via pyramid subdivision)
 
-This approach was implemented by creating a function: 
+This approach was implemented by creating a dynamic function: 
 ```py
 def extract_spatial_pyramid_soft(img, sift_provider, kmeans_model, k, sigma)
 ```
-which extracts the SIFT descriptors and computes the soft assignment weights and then defines two spatial pyramid levels:
+which extracts the SIFT descriptors and computes the soft assignment weights and then defines a user defined number of spatial pyramid levels:
 
 - Level 0: The entire image -> 1 histogram
 - Level 1: Split the image in a 2x2 grid --> 4 histograms
+- Level 2: Split the image in a 4x4 grid --> 16 histograms
+- Level 3: Split the image in a 8x8 grid --> 32 histograms
+- etc...
 
 To create the 4 histograms (one for each block of the 2x2 grid), the ```x``` and ```y``` coordinates of each keypoint were used, allowing us to determine which quadrant it belongs to. So at the end we have a feature vector that is 5 times bigger after concatenation. Lastly, L1 normalisation was performed to ensure comparability between images. 
 The train and test images were then processed using this function in order to produce ```X_train_spm``` and ```X_test_spm```. Histograms are then standardised using ```StandardScaler``` before training a Linear SVM. 
