@@ -69,8 +69,8 @@ The most frequently confused classes are Forest and Open Country, as well as Ope
 
 <p align="center">
   <img src="images/Mountains.jpg" width="33%" />
-  <img src="images/images/Forest.jpg" width="33%" />
-  <img src="OpenCountry.jpg" width="33%" />
+  <img src="images/Forest.jpg" width="33%" />
+  <img src="images/OpenCountry.jpg" width="33%" />
 </p>
 
 Lastly, the Nearest Neighbour classifier provided a simple and effective baseline for evaluating the Bag-of-Words representation. While it did not model class boundaries explicitly, its performance reflected the quality of the visual vocabulary and the histogram representation. 
