@@ -150,7 +150,10 @@ In the standard BoW model used so far, each SIFT descriptor is assigned to a sin
 
 Soft assignment addresses this issue by allowing each descriptor to contribute to multiple histogram bins with corresponding weights based on distance to each cluster centre. This provides a smoother, more robust image representation
 
-This is exactly what was implemented in step 8. 1000 SIFT descriptors were randomly sampled from the training set. For each descriptor, the distance to all cluster centers was computed, and the minimum distances were recorded. The average of these minimum distances was then used as the value of σ, which controls the Gaussian soft assignment, assigning higher weights to clusters closer to each descriptor. ```weights = np.exp(- (distances ** 2) / (2  sigma * 2))```
+This is exactly what was implemented in step 8. 1000 SIFT descriptors were randomly sampled from the training set. For each descriptor, the distance to all cluster centers was computed, and the minimum distances were recorded. The average of these minimum distances was then used as the value of σ, which controls the Gaussian soft assignment, assigning higher weights to clusters closer to each descriptor.
+```py
+weights = np.exp(- (distances ** 2) / (2  sigma * 2))
+```
 A function that computes the soft assignment histogram for a given image was then built. For each image, SIFT descriptors are extracted, and for each descriptor, the distances to all cluster centers are calculated to determine the corresponding weights. The contributions of all descriptors are then summed to construct the histogram, which is then L1 normalised to ensure comparability across images.
 Both the train and test datasets were processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
 
@@ -166,7 +169,11 @@ Spatial Pyramid Matching (SPM) [Lazebnik et al., 2006] addresses this by partiti
 - Appearance information (via soft ssigned histograms)
 - Spatial layout information (via pyramid subdivision)
 
-This approach was implemented by creating a function: ```def extract_spatial_pyramid_soft(img, sift_provider, kmeans_model, k, sigma)``` which extracts the SIFT descriptors and computes the soft assignment weights and then defines two spatial pyramid levels:
+This approach was implemented by creating a function: 
+```py
+def extract_spatial_pyramid_soft(img, sift_provider, kmeans_model, k, sigma)
+```
+which extracts the SIFT descriptors and computes the soft assignment weights and then defines two spatial pyramid levels:
 
 - Level 0: The entire image -> 1 histogram
 - Level 1: Split the image in a 2x2 grid --> 4 histograms
@@ -180,7 +187,7 @@ Note that it is only roughly 1% more accurate than the soft assigment method. Th
 
 
 
-## Disclaimer
+## Disclaimer ⚠️
 The code used in this project was largely written with the assistance of a large language model, due to my limited proficiency in programming languages. However, I am able to read, understand, and critically evaluate the implemented code. Thus, all design choices, results, and any potential errors or inaccuracies present in this project are solely my responsibility.
 
 
