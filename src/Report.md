@@ -67,25 +67,11 @@ In addition to accuracy, a confusion matrix is computed to provide a detailed an
 
 The most frequently confused classes are Forest and Open Country, as well as Open Country and Mountains. This is expected, since images labeled as Open Country in the dataset often contain visual elements of forests or mountainous terrain. As a result, these overlapping features naturally confuse the relatively simple classification model.
 
-<div style="text-align:center;">
-
-  <div style="display:inline-block; margin:0 5px; text-align:center;">
-    <img src="images/Mountains.jpg" width="200px" /><br>
-    <b>Mountains</b>
-  </div>
-
-  <div style="display:inline-block; margin:0 5px; text-align:center;">
-    <img src="images/Forest.jpg" width="200px" /><br>
-    <b>Forest</b>
-  </div>
-
-  <div style="display:inline-block; margin:0 5px; text-align:center;">
-    <img src="images/OpenCountry.jpg" width="200px" /><br>
-    <b>Open Country</b>
-  </div>
-
-</div>
-
+<p align="center">
+  <img src="images/Mountains.jpg" width="33%" />
+  <img src="images/images/Forest.jpg" width="33%" />
+  <img src="OpenCountry.jpg" width="33%" />
+</p>
 
 Lastly, the Nearest Neighbour classifier provided a simple and effective baseline for evaluating the Bag-of-Words representation. While it did not model class boundaries explicitly, its performance reflected the quality of the visual vocabulary and the histogram representation. 
 
