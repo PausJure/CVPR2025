@@ -24,6 +24,7 @@ Since we are dealing with very different scenes in the dataset a MAX_PER_IMAGE l
 Collecting all descriptors for each image would let more "complex" images dominate the pool and bias KMeans toward their features. Limiting descriptors per image ensures each image contributes more equally, producing a more balanced and robust visual vocabulary.
 
 Proceeding with the task, k-means clustering was implemented, leaving the number of clusters as a user definable value to be able to experiment and fine-tune the pipeline. Note that the n_init parameter in the KMeans function is set to 10, essentially running the algorithm 10 times with different initialisations and then choosing the best solution.
+
 ![Kmeans convergence](images/K-means_convergence.gif)
 
 
