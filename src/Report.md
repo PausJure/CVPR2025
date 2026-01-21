@@ -15,6 +15,8 @@ The chosen development environment for this project is Google Colab Notebook, as
 <sub>  
 <i>
 ___________________________________
+
+
 In the following report, all stated accuracies and confusion matrices refer to a specific iteration of the project using roughly 99000 sampled SIFT descriptors (approximately 30 per test image), `RANDOM_SEED = 42`, and a visual vocabulary size of `K_WORDS = 20`. The SVM regularisation parameter C and χ² kernel scaling factors were set to commonly used default values (typically C = 1 or C = 10 for non-linear kernels and \sigma = 0.5). These parameters do not correspond to the optimal configuration. The final, optimised values are briefly discussed in the “Final Remarks” section and are fully documented in the provided code.
 
 ___________________________________
