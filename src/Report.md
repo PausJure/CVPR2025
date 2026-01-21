@@ -4,7 +4,7 @@
 I selected this project because it aligns closely with my academic interests and has strong potential for reuse in a future Electronic System Design course. In that course, I plan to develop a system that acquires image data from a camera through an FPGA platform (DE10-SoC) and performs image processing tasks, with the goal of recognizing vehicle license plate numbers. This project provides a solid foundation for that objective, as it allows me to explore relevant concepts and techniques that can be extended and adapted for more advanced image acquisition and processing applications.
 
 ## Introduction
-In this project, a complete Bag-of-Words image classification pipeline is implemented and evaluated on a scene recognition dataset containing 15 classes. The pipeline includes visual vocabulary construction using k-means clustering, histogram-based image representation, and classification using both nearest-neighbour and multiclass linear Support Vector Machine classifiers. The performance of the proposed approach is assessed using confusion matrices and overall classification accuracy.
+In this project, a complete Bag-of-Words image classification pipeline is implemented and evaluated on a scene recognition dataset containing 15 classes. The pipeline includes visual vocabulary construction using k-means clustering, histogram-based image representation, and classification using both nearest-neighbour and multiclass linear SVM classifiers. The performance of the proposed approach is assessed using confusion matrices and overall classification accuracy.
 
 ## Tools
 The chosen development environment for this project is Google Colab Notebook, as it offers a straightforward setup, minimal configuration requirements, and provides all the necessary computational tools. To organise the project, a dedicated folder was created in Google Drive, containing the provided training and test datasets obtained from Moodle. A Google Colab notebook was then used to access this directory and process the image data stored within it.
@@ -15,7 +15,7 @@ The chosen development environment for this project is Google Colab Notebook, as
 <div align="center">
 <sub>  
 <i> 
-In the following report, all stated accuracies and confusion matrices refer to a specific iteration of the project using roughly 99000 sampled SIFT descriptors (approximately 30 per test image), `RANDOM_SEED = 42`, and a visual vocabulary size of `K_WORDS = 20`. The SVM regularisation parameter C and χ² kernel scaling factors were set to commonly used default values (typically C = 1 or C = 10 for non-linear kernels and \sigma = 0.5). These parameters do not correspond to the optimal configuration. The final, optimised values are briefly discussed in the “Final Remarks” section and are fully documented in the provided code.
+In the following report, all stated accuracies and confusion matrices refer to a specific iteration of the project using roughly 99000 sampled SIFT descriptors (66 per test image), `RANDOM_SEED = 42`, and a visual vocabulary size of `K_WORDS = 20`. The SVM regularisation parameter C and χ² kernel scaling factors were set to commonly used default values (typically C = 1 or C = 10 for non-linear kernels and sigma = 0.5). These parameters do not correspond to the optimal configuration. The final, optimised values are briefly discussed in the “Final Remarks” section and are fully documented in the provided code.
 
 _______________________________________
 <i>
@@ -27,9 +27,9 @@ _______________________________________
 
 
 ## 1. Building a Visual Vocabulary
-To complete this task it was required to sample a certain number of sift descriptors, cluster them and save the centroids for future use. This was done similarly to the approach presented in class in the LabLecture2. The requirement stated that we would need a variable number of samples and cluster numbers, and this was implemented seemlesly in the code. 
+To complete this task it was required to sample a certain number of sift descriptors, cluster them and save the centroids for future use. This was done similarly to the approach presented in class in LabLecture2. The requirement stated that we would need a variable number of samples and cluster numbers, and this was implemented seemlesly in the code. 
 
-Since we are dealing with very different scenes in the dataset a MAX_PER_IMAGE limit on sift descriptors was used to try and avoid overrepresentation since some images might contain a very large number of descriptors like an image of a forest which might yield thousands of SIFT descriptors, while a simple image of a clear sky or a plain wall might only yield a few dozen.
+Since we are dealing with very different scenes in the dataset a MAX_PER_IMAGE limit on sift descriptors was used to try and avoid overrepresentation since some images might contain a very large number of descriptors, like an image of a forest which might yield thousands of SIFT descriptors, while a simple image of a clear sky or a plain wall might only yield a few dozen.
 
 <p align="center">
   <img src="images/SIFTkeypoints1.png" width="33%" />
@@ -71,11 +71,11 @@ For simplicity the distance employed at this stage is the Euclidean distance, wh
 
 Unlike parametric models, the Nearest Neighbor classifier does not require an explicit training phase; it simply stores the feature vectors and corresponding labels of the training images.
 
-After setting up and implementing the k-NN classfier it is evaluated by comparing the predicted label of each test image with the ground truth (the actual label of the image). this is done in the following line of code: ```accuracy = accuracy_score(y_test, y_pred_nn)```, where ```y_test``` represents the true labels of the test dataset (like "Coast", "Forest" ...) and ```y_pred_nn``` represents the predicted labels generated by the NN classifier for the same test dataset.
+After setting up and implementing the k-NN classfier, it is evaluated by comparing the predicted label of each test image with the ground truth (the actual label of the image). this is done in the following line of code: ```accuracy = accuracy_score(y_test, y_pred_nn)```, where ```y_test``` represents the true labels of the test dataset (like "Coast", "Forest" ...) and ```y_pred_nn``` represents the predicted labels generated by the NN classifier for the same test dataset.
 
 The final accuracy value is printed on stdout in percentage by simply multiplying ```accuracy``` by ```100```.
 
-As for the results, this classifier performs decently well with an accuracy of roughly 30% with euclidean distance and ```n_neihbors=1```. Changing to manhattan distance increases the accuracy to 35%; however changing ```n_neihbors``` value to 15 and keeping the euclidean distance seems to be the sweetspot pushing the accuracy to rougly 39%. 
+As for the results, this classifier performs decently well with an accuracy of roughly 30% with euclidean distance and ```n_neihbors=1```. Changing to manhattan distance increases the accuracy to 35%; however changing ```n_neihbors``` value to 15 and keeping the euclidean distance seems to be the sweetspot pushing the accuracy to rougly 38%. 
 
 In addition to accuracy, a confusion matrix is computed to provide a detailed analysis of performance. The confusion matrix reports, for each true category, the number of test images assigned to each predicted category. This allows easy identification of frequently confused classes, like visually similar indoor or outdoor environments. In this implementation, the confusion matrix is visualized using a heatmap representation, making inspection of the classifier’s strengths and weaknesses across the 15 categories easy to spot.
 
@@ -95,7 +95,7 @@ The results obtained with this method will serve as a reference point for compar
 
 &nbsp;
 ## 4. Training a multiclass linear SVM
-Since standard SVMs are inherently binary classifiers, and we have 15 classes, we will train a multiclass linear Support Vector Machine (SVM) classifier using the one-vs-rest strategy, with the goal of learning decision boundaries for each of the 15 scene categories present in our dataset. 
+Since standard SVMs are binary classifiers, and we have 15 classes, we will train a multiclass linear Support Vector Machine (SVM) classifier using the one-vs-rest strategy, with the goal of learning decision boundaries for each of the 15 scene categories present in our dataset. 
 
 Before training the SVM classifiers, the BoW histograms are scaled ensuring that all features are on a comparable scale. A ```StandardScaler``` is fitted on the training data and then applied to both the training and test histograms. This results in features with zero mean and unit variance, which helps the linear SVM treat all features equally during learning.
 
@@ -107,7 +107,7 @@ X_test_scaled = scaler.transform(X_test)
 
 The scaler is fitted only on the training data to avoid using any information from the test set, while the same transformation is applied to the test data to ensure consistency between training and evaluation.
 
-To handle the 15-category classification problem, a one-vs-rest strategy is used. Meaning a separate binary classifier is trained for each of the 15 categories: samples belonging to the target class are labeled as positive (1), while all other samples are labeled as negative (0).
+To handle the 15 category classification problem, a one-vs-rest strategy is used. Meaning a separate binary classifier is trained for each of the 15 categories: samples belonging to the target class are labeled as positive (1), while all other samples are labeled as negative (0).
 
 A total of 15 linear SVM classifiers are trained, one for each scene category. Each classifier learns a linear decision boundary that separates its class from the rest. The LinearSVC implementation from scikit-learn is used with a regularisation parameter ```𝐶=1.0```, which balances the trade-off between maximising the margin and minimising classification errors.
 
@@ -118,9 +118,9 @@ The trained classifiers will be later combined during evaluation to produce mult
 Note that:
 - The SVM training process is made deterministic using a fixed random seed
 - A sufficiently large maximum number of iterations ensures that the optimization algorithm has time to converge
-- The dual formulation is disabled to improve efficiency, as the number of training samples exceeds the feature dimensionality.
+- dual formulation is disabled to improve efficiency, as the number of training samples exceeds the feature dimensionality.
 
-Compared to the Nearest Neighbor approach, the linear SVM classifier provides a more powerful alternative by explicitly learning class-specific boundaries in the feature space. While still relatively simple, this model should outperform the Nearest Neighbor baseline since it better captures the discriminative patterns across scene categories. The effectiveness of this approach is evaluated in the following section.
+Compared to the Nearest Neighbor approach, the linear SVM classifier provides a more powerful alternative by explicitly learning class specific boundaries in the feature space. While still relatively simple, this model should outperform the Nearest Neighbor baseline since it better captures the discriminative patterns across scene categories. The effectiveness of this approach is evaluated in the following section.
 
 
 &nbsp;
@@ -137,12 +137,12 @@ svm_acc = accuracy_score(y_test, y_pred_svm)
 print(f"Multiclass SVM Accuracy: {svm_acc*100:.2f}%")
 ```
 
-The predicted class labels are compared with the ground truth (```y_test```), to compute the overall classification accuracy. This accuracy measures how often the classifier makes correct predictions across all classes and allows a direct comparison with the Nearest Neighbour baseline.
+The predicted class labels are compared with the ground truth (```y_test```), to compute the overall classification accuracy. 
 In addition to accuracy, a confusion matrix is computed and visualised to analyse class-wise performance. This highlights common confusions between visually similar scene classes and provides insights into the strengths and weaknesses of the multiclass SVM classifier.
 
 ![Image of SVM confusion matrix](images/SVMconfMatrix.png)
 
-As we can see form the results, the multiclass linear SVM demonstrates slightly improved performance compared to the Nearest Neighbor classifier. Pushing our acuracy to roughly 39%.
+As we can see form the results, the multiclass linear SVM demonstrates slightly improved performance compared to the Nearest Neighbor classifier. Pushing our acuracy to roughly 40%.
 
 
 
@@ -153,25 +153,25 @@ As we can see form the results, the multiclass linear SVM demonstrates slightly 
 ## Optional tasks
 
 ### 6. Training the SVM using a Gaussian kernel
-This section explores an optional extension of the project, in which a non-linear Support Vector Machine is trained using a generalized Gaussian kernel based on the χ² distance. This kernel is particularly well suited for histogram representations, such as our Bag-of-Words features, as it better captures differences of distribution between feature vectors.
+This section explores an optional extension of the project, in which a non linear SVM is trained using a generalized Gaussian kernel based on the χ² distance. This kernel is particularly well suited for histogram representations, such as our Bag-of-Words features, as it better captures differences of distribution between feature vectors.
 
-We start by computing our kernels using the ```chi2_kernel(X_train, X_train, gamma=0.5)``` function provided by the sickit learn library. This function implements a generalised Gaussian kernel based on the  χ² distance, where gamma is a scaling parameter.
+We start by computing our kernels using the ```chi2_kernel(X_train, X_train, gamma=0.5)``` function provided by the scikit learn library. This function implements a generalised Gaussian kernel based on the  χ² distance, where gamma is a scaling parameter.
 
-A multiclass SVM classifier is trained using the precomputed χ² kernel matrix. The standard SVC implementation is employed with the kernel='precomputed' option, allowing for direct use of the custom kernel we calculated. Note that a higher regularisation parameter ```C``` is selected compared to the one used in the linear SVM, as we now have a non-linear kernel with more complex decision boundaries which often benefit from reduced regularisation.
+A multiclass SVM classifier is trained using the precomputed χ² kernel matrix. The standard SVC implementation is employed with the ```kernel='precomputed'``` option, allowing for direct use of the custom kernel we calculated. Note that a higher regularisation parameter ```C``` is selected compared to the one used in the linear SVM, as we now have a non-linear kernel with more complex decision boundaries which often benefit from reduced regularisation.
 
 The trained SVM is evaluated on the test set by predicting class labels using the χ² kernel computed between test and training histograms. The classification accuracy is computed once again by comparing the predicted labels with the ground truth annotations and we also construct a confusion matrix to analyze performance more closely. 
 
 ![Image of a non-linear SVM confusion matrix](images/ChiSVMconfMatrix.png)
 
-The performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 39%.
+The performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 38%.
 
 
 &nbsp;
 ### 7. Multiclass SVM using the Error Correcting Output Code (ECOC)
 This task was performed following the approach introduced by Dietterich and Bakiri (1994). Here each class is represented by a binary code (an array of 0 and 1). Ideally we want each class represented by a unique code. 
-The implementation was done using the scikit-learn library's OutputCodeClassifier function, which generates these unique codes randomly. 
-So instead of training one classifier per class (as in one-vs-rest), ECOC uses one binary classifier per bit of the unique code for each class (codebook). 
-Since we have more classifiers than in our previous approaches, some of them should theoretically correct the mistakes made by other classifiers. However in practice classifier mistakes are correlated and this does not happen. 
+The implementation was done using the scikit-learn library's ```OutputCodeClassifier``` function, which generates these unique codes randomly. 
+Basically, instead of training one classifier per class (as in one-vs-rest), ECOC uses one binary classifier per bit of the unique code for each class (codebook). 
+Since we have more classifiers than in our previous approaches, some of them should theoretically correct the mistakes made by other classifiers. However in practice classifier mistakes are correlated and this does not happen perfectly. 
 This is exactly what we see in our results: the accuracy of this approach is roughly 32%.
 
 
@@ -188,7 +188,7 @@ weights = np.exp(- (distances ** 2) / (2  sigma * 2))
 A function that computes the soft assignment histogram for a given image was then built. For each image, SIFT descriptors are extracted, and for each descriptor, the distances to all cluster centers are calculated to determine the corresponding weights. The contributions of all descriptors are then summed to construct the histogram, which is then L1 normalised to ensure comparability across images.
 Both the train and test datasets were re-processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
 
-As stated earlier the linear multiclass SVM achieved an accuracy of 38%, whereas the current approach improved performance to 46%!
+As stated earlier the linear multiclass SVM achieved an accuracy of 39%, whereas the current approach improved performance to 46%!
 
 
 &nbsp;
@@ -213,7 +213,7 @@ which extracts the SIFT descriptors and computes the soft assignment weights and
 - etc...
 
 Here level 1 was chosen since higher levels increased compute time exponentialy.
-To create the 4 histograms (one for each block of the 2x2 grid), the ```x``` and ```y``` coordinates of each keypoint were used, allowing us to determine which quadrant it belongs to. So at the end we have a feature vector that is 5 times bigger after concatenation. Lastly, L1 normalisation was performed to ensure comparability between images. 
+To create the 4 histograms (one for each block of the 2x2 grid), the ```x``` and ```y``` coordinates of each keypoint were used, allowing us to determine which quadrant it belongs to. At the end we have a feature vector that is 5 times bigger after concatenation. Lastly, L1 normalisation was performed to ensure comparability between images. 
 The train and test images were then processed using this function in order to produce ```X_train_spm``` and ```X_test_spm```. Histograms are then standardised using ```StandardScaler``` before training a Linear SVM. 
 
 This approach increases accuracy to 47% from the initial 36% baseline. 
@@ -221,21 +221,21 @@ Note that it is only roughly 1% more accurate than the soft assigment method. Th
 
 &nbsp;
 ### FINAL REMARKS
-In addition to the required experiments, two further classifiers were implemented by combining the χ² kernel SVM (Step 6) with soft assignment (Step 8), and subsequently with spatial information (Steps 6, 8, and 9). These extensions were motivated by curiosity and by the desire to explore how different design choices affect performance on the dataset, with the goal of maximizing classification accuracy while deepening practical understanding of the Bag-of-Words framework.
+In addition to the required experiments, two further classifiers were implemented by combining the χ² kernel SVM (Step 6) with soft assignment (Step 8), and subsequently with spatial information (Steps 6, 8, and 9). These extensions were motivated by curiosity and by the desire to explore how different design choices affect performance on the dataset, with the goal of maximizing classification accuracy while improving understanding of the Bag-of-Words framework.
 
 Throughout the experimentation process, several parameters were progressively refined, including the χ² kernel scaling factor, the SVM regularization parameter C, the number of visual words, and the total number of sampled SIFT descriptors. As a result, some of the final results differ significantly from those discussed in earlier sections of the report. This variation reflects the nature of the learning process: as theoretical understanding improved, the pipeline was more effectively tuned, leading to substantial performance gains.
 
-Lastly, by experimenting with the code and tuning various parameter values, the maximum accuracies achieved are reported below:
+Lastly, by experimenting with the code and tuning various parameter values, the maximum accuracies achieved are reported below along with the respective confusion matrices:
 
 ![Image of Max Accuracies](images/ComparisonMatrix.png)
 
-As can be seen from the image, performance consistently improves as the feature representation and similarity measure are rafined, showing that better descriptors and more suitable kernels have a strong impact on scene classification. On the other hand, adding more complex components to the pipeline leads to diminishing returns and can even reduce performance if not carefully tuned, suggesting that improving the representation is often more important than increasing classifier complexity.
+As can be seen from the image, performance consistently improves as the feature representation and similarity measure are rafined, showing that better descriptors and more suitable kernels have a strong impact on scene classification. On the other hand, adding more complex components to the pipeline leads to diminishing returns and can even reduce performance in some cases if not carefully tuned, suggesting that improving the representation is often more important than increasing classifier complexity.
 
 
 &nbsp;
 
 
-Overall, this project proved to be highly valuable, as it facilitated a deeper understanding of theoretical concepts that might otherwise remain abstract. More importantly, it provided hands-on experience with the complete Bag-of-Words pipeline, from feature extraction to classification and evaluation. This practical insight has established a solid foundation for applying similar techniques in future projects, including potential applications in other courses, as previously discussed.
+Overall, this project proved to be highly valuable, as it allowed for a deeper understanding of theoretical concepts that might otherwise remain abstract. More importantly, it provided hands-on experience with the complete Bag-of-Words pipeline, from feature extraction to classification and evaluation. This practical insight has established a solid fundation for applying similar techniques in future projects, including potential applications in other courses, as previously discussed.
 
 &nbsp;
 &nbsp;
@@ -250,6 +250,7 @@ The code used in this project was largely written with the assistance of a large
 - https://en.wikipedia.org/wiki/K-means_clustering
 - Lab Lecture Laboratories [Espetially LabLecture2]
 - https://scikit-learn.org/stable/supervised_learning.html
+- https://machinelearningmastery.com/one-vs-rest-and-one-vs-one-for-multi-class-classification/
 - https://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OutputCodeClassifier.html
 - https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.chi2_kernel.html
 - https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
@@ -260,6 +261,10 @@ artificial intelligence research, 2:263–286.
 bags of features: Spatial pyramid matching for recognizing natural scene
 categories. In 2006 IEEE Computer Society Conference on Computer Vision
 and Pattern Recognition (CVPR’06), volume 2, pages 2169–2178.
+
+
+--- 
+Jure Paus 21.1.2026.
 
 
 
