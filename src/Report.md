@@ -9,6 +9,19 @@ In this project, a complete Bag-of-Words image classification pipeline is implem
 ## Tools
 The chosen development environment for this project is Google Colab Notebook, as it offers a straightforward setup, minimal configuration requirements, and provides all the necessary computational tools. To organise the project, a dedicated folder was created in Google Drive, containing the provided training and test datasets obtained from Moodle. A Google Colab notebook was then used to access this directory and process the image data stored within it.
 
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+
+<div align="center">
+<sub>
+<i> In the following report, all stated accuracies and confusion matrices refer to a specific iteration of the project using roughly 99000 sampled SIFT descriptors (approximately 30 per test image), `RANDOM_SEED = 42`, and a visual vocabulary size of `K_WORDS = 20`. The SVM regularisation parameter C and χ² kernel scaling factors were set to commonly used default values (typically C = 1 or C = 10 for non-linear kernels and \sigma = 0.5). These parameters do not correspond to the optimal configuration. The final, optimised values are briefly discussed in the “Final Remarks” section and are fully documented in the provided code.
+<i>
+</sub>
+</div>
+
+
 
 ## 1. Building a Visual Vocabulary
 To complete this task it was required to sample a certain number of sift descriptors, cluster them and save the centroids for future use. This was done similarly to the approach presented in class in the LabLecture2. The requirement stated that we would need a variable number of samples and cluster numbers, and this was implemented seemlesly in the code. 
@@ -23,7 +36,7 @@ Since we are dealing with very different scenes in the dataset a MAX_PER_IMAGE l
 
 Collecting all descriptors for each image would let more "complex" images dominate the pool and bias KMeans toward their features. Limiting descriptors per image ensures each image contributes more equally, producing a more balanced and robust visual vocabulary.
 
-Proceeding with the task, k-means clustering was implemented, leaving the number of clusters as a user definable value to be able to experiment and fine-tune the pipeline. Note that the n_init parameter in the KMeans function is set to 10, essentially running the algorithm 10 times with different initialisations and then choosing the best solution. The .gif shows intuitively what the algorithm does.
+Proceeding with the task, k-means clustering was implemented, leaving the number of clusters as a user definable value to be able to experiment and fine-tune the pipeline. The ideal value seems to be around 100-200 clusters, since the accuracy across all classifier improves by roughly 10% if we use 150 clusters rather than 20. Note also that the n_init parameter in the KMeans function is set to 10, essentially running the algorithm 10 times with different initialisations and then choosing the best solution. The .gif shows intuitively what the algorithm does.
 
 <img src="images/K-means_convergence.gif" width="20%">
 
@@ -59,7 +72,7 @@ After setting up and implementing the k-NN classfier it is evaluated by comparin
 
 The final accuracy value is printed on stdout in percentage by simply multiplying ```accuracy``` by ```100```.
 
-As for the results, this classifier performs decently well with an accuracy of roughly 30% with euclidean distance and ```n_neihbors=1```. Changing to manhattan distance increases the accuracy to 35%; however changing ```n_neihbors``` value to 15 and keeping the euclidean distance seems to be the sweetspot pushing the accuracy to rougly 37%. 
+As for the results, this classifier performs decently well with an accuracy of roughly 30% with euclidean distance and ```n_neihbors=1```. Changing to manhattan distance increases the accuracy to 35%; however changing ```n_neihbors``` value to 15 and keeping the euclidean distance seems to be the sweetspot pushing the accuracy to rougly 39%. 
 
 In addition to accuracy, a confusion matrix is computed to provide a detailed analysis of performance. The confusion matrix reports, for each true category, the number of test images assigned to each predicted category. This allows easy identification of frequently confused classes, like visually similar indoor or outdoor environments. In this implementation, the confusion matrix is visualized using a heatmap representation, making inspection of the classifier’s strengths and weaknesses across the 15 categories easy to spot.
 
@@ -75,7 +88,6 @@ Examples of images from Forest, Mountains and OpenCountry classes respectively:
 </p>
 
 Lastly, the Nearest Neighbour classifier provided a simple and effective baseline for evaluating the Bag-of-Words representation. While it did not model class boundaries explicitly, its performance reflected the quality of the visual vocabulary and the histogram representation. 
-
 The results obtained with this method will serve as a reference point for comparison with more advanced classifiers, such as the linear Support Vector Machine presented in the following section.
 
 
@@ -189,7 +201,7 @@ This approach was implemented by creating a dynamic function:
 ```py
 def extract_spatial_pyramid_soft(img, sift_provider, kmeans_model, k, sigma)
 ```
-which extracts the SIFT descriptors and computes the soft assignment weights and then defines a user defined number of spatial pyramid levels:
+which extracts the SIFT descriptors and computes the soft assignment weights and then processes a user defined number of spatial pyramid levels:
 
 - Level 0: The entire image -> 1 histogram
 - Level 1: Split the image in a 2x2 grid --> 4 histograms
@@ -197,6 +209,7 @@ which extracts the SIFT descriptors and computes the soft assignment weights and
 - Level 3: Split the image in a 8x8 grid --> 32 histograms
 - etc...
 
+Here level 1 was chosen since higher levels increased compute time exponentialy.
 To create the 4 histograms (one for each block of the 2x2 grid), the ```x``` and ```y``` coordinates of each keypoint were used, allowing us to determine which quadrant it belongs to. So at the end we have a feature vector that is 5 times bigger after concatenation. Lastly, L1 normalisation was performed to ensure comparability between images. 
 The train and test images were then processed using this function in order to produce ```X_train_spm``` and ```X_test_spm```. Histograms are then standardised using ```StandardScaler``` before training a Linear SVM. 
 
@@ -204,6 +217,16 @@ This approach increases accuracy to 47% from the initial 36% baseline.
 Note that it is only roughly 1% more accurate than the soft assigment method. This may be due to small object sizes, variable spatial arrangements, or reduced descriptor density in subdivided quadrants. Nonetheless, the spatial pyramid representation maintains performance while encoding additional spatial structure. 
 
 
+### FINAL REMARKS
+Playing around with the code, and experimenting with different parameter values the maximum accuracies we could squeese are the following:
+
+![Image of Max Accuracies](images/MaxAcc.png)
+
+In addition to the required experiments, two further classifiers were implemented by combining the χ² kernel SVM (Step 6) with soft assignment (Step 8), and subsequently with spatial information (Steps 6, 8, and 9). These extensions were motivated by curiosity and by the desire to explore how different design choices affect performance on the dataset, with the goal of maximizing classification accuracy while deepening practical understanding of the Bag-of-Words framework.
+
+Throughout the experimentation process, several parameters were progressively refined, including the χ² kernel scaling factor, the SVM regularization parameter C, the number of visual words, and the total number of sampled SIFT descriptors. As a result, some of the final results differ significantly from those discussed in earlier sections of the report. This variation reflects the iterative nature of the learning process: as theoretical understanding improved, the pipeline was more effectively tuned, leading to substantial performance gains.
+
+Overall, this project proved to be highly valuable, as it facilitated a deeper understanding of theoretical concepts that might otherwise remain abstract. More importantly, it provided hands-on experience with the complete Bag-of-Words pipeline, from feature extraction to classification and evaluation. This practical insight has established a solid foundation for applying similar techniques in future projects, including potential applications in other courses, as previously discussed.
 
 
 ## Disclaimer ⚠️
