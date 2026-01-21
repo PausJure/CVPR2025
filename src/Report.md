@@ -1,5 +1,5 @@
-# CVPR Report on Project 2 - Bag-of-Words classifier
-
+# **CVPR Report on Project 2 - Bag-of-Words classifier**
+&nbsp;
 ## Motivation
 I selected this project because it aligns closely with my academic interests and has strong potential for reuse in a future Electronic System Design course. In that course, I plan to develop a system that acquires image data from a camera through an FPGA platform (DE10-SoC) and performs image processing tasks, with the goal of recognizing vehicle license plate numbers. This project provides a solid foundation for that objective, as it allows me to explore relevant concepts and techniques that can be extended and adapted for more advanced image acquisition and processing applications.
 
@@ -10,9 +10,6 @@ In this project, a complete Bag-of-Words image classification pipeline is implem
 The chosen development environment for this project is Google Colab Notebook, as it offers a straightforward setup, minimal configuration requirements, and provides all the necessary computational tools. To organise the project, a dedicated folder was created in Google Drive, containing the provided training and test datasets obtained from Moodle. A Google Colab notebook was then used to access this directory and process the image data stored within it.
 
 &nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
 
 <div align="center">
 <sub>
@@ -21,6 +18,7 @@ The chosen development environment for this project is Google Colab Notebook, as
 </sub>
 </div>
 
+&nbsp;
 
 
 ## 1. Building a Visual Vocabulary
@@ -234,7 +232,8 @@ As can be seen from the image, performance consistently improves as the feature 
 
 Overall, this project proved to be highly valuable, as it facilitated a deeper understanding of theoretical concepts that might otherwise remain abstract. More importantly, it provided hands-on experience with the complete Bag-of-Words pipeline, from feature extraction to classification and evaluation. This practical insight has established a solid foundation for applying similar techniques in future projects, including potential applications in other courses, as previously discussed.
 
-
+&nbsp;
+&nbsp;
 
 ## Disclaimer ⚠️
 The code used in this project was largely written with the assistance of a large language model, due to my limited proficiency in programming languages. However, I am able to read, understand, and critically evaluate the implemented code. Thus, all design choices, results, and any potential errors or inaccuracies present in this project are solely my responsibility.
