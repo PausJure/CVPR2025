@@ -163,7 +163,7 @@ The trained SVM is evaluated on the test set by predicting class labels using th
 
 ![Image of a non-linear SVM confusion matrix](images/ChiSVMconfMatrix.png)
 
-The performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 38%.
+The performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 40%.
 
 
 &nbsp;
