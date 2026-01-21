@@ -176,7 +176,7 @@ This is exactly what we see in our results: the accuracy of this approach is rou
 
 
 &nbsp;
-### 8. Soft assigment
+### 8. Soft assignment
 In the standard BoW model used so far, each SIFT descriptor is assigned to a single visual word (cluster centroid) using hard assignment. However, this can lead to quantisation errors, especially when descriptors are near cluster boundaries.
 
 Soft assignment addresses this issue by allowing each descriptor to contribute to multiple histogram bins with corresponding weights based on distance to each cluster centre. This provides a smoother, more robust image representation
