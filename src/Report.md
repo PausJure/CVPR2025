@@ -218,15 +218,22 @@ Note that it is only roughly 1% more accurate than the soft assigment method. Th
 
 
 ### FINAL REMARKS
-Playing around with the code, and experimenting with different parameter values the maximum accuracies we could squeese are the following:
-
-![Image of Max Accuracies](images/MaxAcc.png)
-
 In addition to the required experiments, two further classifiers were implemented by combining the χ² kernel SVM (Step 6) with soft assignment (Step 8), and subsequently with spatial information (Steps 6, 8, and 9). These extensions were motivated by curiosity and by the desire to explore how different design choices affect performance on the dataset, with the goal of maximizing classification accuracy while deepening practical understanding of the Bag-of-Words framework.
 
-Throughout the experimentation process, several parameters were progressively refined, including the χ² kernel scaling factor, the SVM regularization parameter C, the number of visual words, and the total number of sampled SIFT descriptors. As a result, some of the final results differ significantly from those discussed in earlier sections of the report. This variation reflects the iterative nature of the learning process: as theoretical understanding improved, the pipeline was more effectively tuned, leading to substantial performance gains.
+Throughout the experimentation process, several parameters were progressively refined, including the χ² kernel scaling factor, the SVM regularization parameter C, the number of visual words, and the total number of sampled SIFT descriptors. As a result, some of the final results differ significantly from those discussed in earlier sections of the report. This variation reflects the nature of the learning process: as theoretical understanding improved, the pipeline was more effectively tuned, leading to substantial performance gains.
+
+Lastly, by experimenting with the code and tuning various parameter values, the maximum accuracies achieved are reported below:
+
+![Image of Max Accuracies](images/ComparisonMatrix.png)
+
+As can be seen from the image, performance consistently improves as the feature representation and similarity measure are rafined, showing that better descriptors and more suitable kernels have a strong impact on scene classification. On the other hand, adding more complex components to the pipeline leads to diminishing returns and can even reduce performance if not carefully tuned, suggesting that improving the representation is often more important than increasing classifier complexity.
+
+
+&nbsp;
+
 
 Overall, this project proved to be highly valuable, as it facilitated a deeper understanding of theoretical concepts that might otherwise remain abstract. More importantly, it provided hands-on experience with the complete Bag-of-Words pipeline, from feature extraction to classification and evaluation. This practical insight has established a solid foundation for applying similar techniques in future projects, including potential applications in other courses, as previously discussed.
+
 
 
 ## Disclaimer ⚠️
