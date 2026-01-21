@@ -14,6 +14,8 @@ The chosen development environment for this project is Google Colab Notebook, as
 <div align="center">
 <sub>
 <i> In the following report, all stated accuracies and confusion matrices refer to a specific iteration of the project using roughly 99000 sampled SIFT descriptors (approximately 30 per test image), `RANDOM_SEED = 42`, and a visual vocabulary size of `K_WORDS = 20`. The SVM regularisation parameter C and χ² kernel scaling factors were set to commonly used default values (typically C = 1 or C = 10 for non-linear kernels and \sigma = 0.5). These parameters do not correspond to the optimal configuration. The final, optimised values are briefly discussed in the “Final Remarks” section and are fully documented in the provided code.
+
+_________________________________________________________________________________
 <i>
 </sub>
 </div>
@@ -39,7 +41,7 @@ Proceeding with the task, k-means clustering was implemented, leaving the number
 <img src="images/K-means_convergence.gif" width="20%">
 
 
-
+&nbsp;
 ## 2. Representing train set images as histograms
 After having constructed the visual vocabulary, we now need to represent each image of the training set as a normalised histogram having k bins, each corresponding to a visual word.
 
@@ -55,7 +57,7 @@ This procedure is then repeated for all images in the training set, producing a 
 
 ![Image of a few L1 normalised histograms](images/fewHistogramsL1norm.png)
 
-
+&nbsp;
 ## 3. Nearest Neighbour Classifier
 
 The first classifier we are required to implement is the nearest neighbour classifier. The goal is to assess how well the histogram representation discriminates between the 15 scene categories using this simple classification approach.
@@ -88,7 +90,7 @@ Examples of images from Forest, Mountains and OpenCountry classes respectively:
 Lastly, the Nearest Neighbour classifier provided a simple and effective baseline for evaluating the Bag-of-Words representation. While it did not model class boundaries explicitly, its performance reflected the quality of the visual vocabulary and the histogram representation. 
 The results obtained with this method will serve as a reference point for comparison with more advanced classifiers, such as the linear Support Vector Machine presented in the following section.
 
-
+&nbsp;
 ## 4. Training a multiclass linear SVM
 Since standard SVMs are inherently binary classifiers, and we have 15 classes, we will train a multiclass linear Support Vector Machine (SVM) classifier using the one-vs-rest strategy, with the goal of learning decision boundaries for each of the 15 scene categories present in our dataset. 
 
@@ -118,7 +120,7 @@ Note that:
 Compared to the Nearest Neighbor approach, the linear SVM classifier provides a more powerful alternative by explicitly learning class-specific boundaries in the feature space. While still relatively simple, this model should outperform the Nearest Neighbor baseline since it better captures the discriminative patterns across scene categories. The effectiveness of this approach is evaluated in the following section.
 
 
-
+&nbsp;
 ## 5. Evaluating the multiclass SVM
 The performance of the SVM is evaluated on the test set. Each test image is represented using a normalised Bag-of-Words histogram stored in ```X_test_scaled```. This guarantees consistency between training and test representations and prevents feature scaling discrepancies from affecting the performance of our classification.
 
@@ -144,7 +146,7 @@ As we can see form the results, the multiclass linear SVM demonstrates slightly 
 
 
 
-
+&nbsp;
 ## Optional tasks
 
 ### 6. Training the SVM using a Gaussian kernel
@@ -161,7 +163,7 @@ The trained SVM is evaluated on the test set by predicting class labels using th
 The performance of this classifier jumps to roughly 44% compared to the linear SVM which had an accuracy of roughly 39%.
 
 
-
+&nbsp;
 ### 7. Multiclass SVM using the Error Correcting Output Code (ECOC)
 This task was performed following the approach introduced by Dietterich and Bakiri (1994). Here each class is represented by a binary code (an array of 0 and 1). Ideally we want each class represented by a unique code. 
 The implementation was done using the scikit-learn library's OutputCodeClassifier function, which generates these unique codes randomly. 
@@ -170,7 +172,7 @@ Since we have more classifiers than in our previous approaches, some of them sho
 This is exactly what we see in our results: the accuracy of this approach is roughly 32%.
 
 
-
+&nbsp;
 ### 8. Soft assigment
 In the standard BoW model used so far, each SIFT descriptor is assigned to a single visual word (cluster centroid) using hard assignment. However, this can lead to quantisation errors, especially when descriptors are near cluster boundaries.
 
@@ -186,7 +188,7 @@ Both the train and test datasets were re-processed using this function, producin
 As stated earlier the linear multiclass SVM achieved an accuracy of 38%, whereas the current approach improved performance to 46%!
 
 
-
+&nbsp;
 ### 9. Adding spatial information
 While Bag-of-Words (BoW) histograms capture the appearance of local features, they ignore spatial information, which can be important for distinguishing image categories.
 
@@ -214,7 +216,7 @@ The train and test images were then processed using this function in order to pr
 This approach increases accuracy to 47% from the initial 36% baseline. 
 Note that it is only roughly 1% more accurate than the soft assigment method. This may be due to small object sizes, variable spatial arrangements, or reduced descriptor density in subdivided quadrants. Nonetheless, the spatial pyramid representation maintains performance while encoding additional spatial structure. 
 
-
+&nbsp;
 ### FINAL REMARKS
 In addition to the required experiments, two further classifiers were implemented by combining the χ² kernel SVM (Step 6) with soft assignment (Step 8), and subsequently with spatial information (Steps 6, 8, and 9). These extensions were motivated by curiosity and by the desire to explore how different design choices affect performance on the dataset, with the goal of maximizing classification accuracy while deepening practical understanding of the Bag-of-Words framework.
 
