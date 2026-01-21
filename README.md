@@ -7,4 +7,6 @@ Computer Vision and Pattern Recognition repository for the project assigment
 ### Google Drive work folder available at:
 - https://drive.google.com/drive/folders/1AoB6MdiC12sqKj5b2v9Yi7Medt1YmfWe
 
-Code also vailable as .ipynb inside the src folder.
+&nbsp;
+
+## Code also vailable as .ipynb inside the src folder.
