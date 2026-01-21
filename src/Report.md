@@ -188,7 +188,7 @@ weights = np.exp(- (distances ** 2) / (2  sigma * 2))
 A function that computes the soft assignment histogram for a given image was then built. For each image, SIFT descriptors are extracted, and for each descriptor, the distances to all cluster centers are calculated to determine the corresponding weights. The contributions of all descriptors are then summed to construct the histogram, which is then L1 normalised to ensure comparability across images.
 Both the train and test datasets were re-processed using this function, producing ```X_train_soft``` and ```X_test_soft```; which contain the histograms.
 
-As stated earlier the linear multiclass SVM achieved an accuracy of 39%, whereas the current approach improved performance to 46%!
+As stated earlier the linear multiclass SVM achieved an accuracy of 40%, whereas the current approach improved performance to 46%!
 
 
 &nbsp;
