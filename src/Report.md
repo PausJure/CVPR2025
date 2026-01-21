@@ -202,7 +202,7 @@ Spatial Pyramid Matching (SPM) [Lazebnik et al., 2006] addresses this by partiti
 
 This approach was implemented by creating a dynamic function: 
 ```py
-def extract_spatial_pyramid_soft(img, sift_provider, kmeans_model, k, sigma)
+def extract_spatial_pyramid_soft_dynamic(img, sift, kmeans, K_WORDS, sigma, levels=PYRAMID_LEVEL)
 ```
 which extracts the SIFT descriptors and computes the soft assignment weights and then processes a user defined number of spatial pyramid levels:
 
