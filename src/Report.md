@@ -216,7 +216,7 @@ Here level 1 was chosen since higher levels increased compute time exponentialy.
 To create the 4 histograms (one for each block of the 2x2 grid), the ```x``` and ```y``` coordinates of each keypoint were used, allowing us to determine which quadrant it belongs to. At the end we have a feature vector that is 5 times bigger after concatenation. Lastly, L1 normalisation was performed to ensure comparability between images. 
 The train and test images were then processed using this function in order to produce ```X_train_spm``` and ```X_test_spm```. Histograms are then standardised using ```StandardScaler``` before training a Linear SVM. 
 
-This approach increases accuracy to 47% from the initial 36% baseline. 
+This approach increases accuracy to 47% from the initial 38% baseline. 
 Note that it is only roughly 1% more accurate than the soft assigment method. This may be due to small object sizes, variable spatial arrangements, or reduced descriptor density in subdivided quadrants. Nonetheless, the spatial pyramid representation maintains performance while encoding additional spatial structure. 
 
 &nbsp;
