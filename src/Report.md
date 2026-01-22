@@ -58,7 +58,7 @@ To make the representation invariant to the number of detected keypoints and com
 
 This procedure is then repeated for all images in the training set, producing a matrix of size ```N × k```, where N is the number of training images and k is the vocabulary size. Each row of this matrix represents the BoW histogram of one image and serves as input to the subsequent classification stages.
 
-![Image of a few L1 normalised histograms](images/fewHistogramsL1norm.png)
+![Image of a few L1 normalised histograms](images/fewHistogramsL1norm2.png)
 
 &nbsp;
 ## 3. Nearest Neighbour Classifier
